@@ -106,34 +106,31 @@ public class Relatorio {
     
     
     
-    public String gerarRelatorio(){
-        return """
-               *Relatório de Aula*
-               *Turma e Aula: %s| Aula %s*
-               *Data: %s*
-               *Prof: %s*
-               
-               *Introdução :* %s
-               
-               *Desenvolvimento:* %s
-               
-               *Tarefa De Casa:* %s
-               
-               *Gravação da Aula:* %s
-               
-               
-               *Qualquer dúvida, pode me chamar por aqui*
-               *Site:* ctrlplay.com
-               """.formatted(
-                       nomeTurma,
-                       numAula,
-                       dataAula,
-                       nomeProfessor,
-                       intro,
-                       develop,
-                       tarefaCasa,
-                       gravacao);
-    }
+    public String gerarRelatorio() {
+    return String.format(
+            "*Relatorio de Aula*\n" +
+            "*Turma e Aula: %s| Aula %s*\n" +
+            "*Data: %s*\n" +
+            "*Prof: %s*\n\n" +
+            "*Introducao :* \n%s\n\n" +
+            "*Desenvolvimento:* \n%s\n\n" +
+            "*Tarefa De Casa:* \n%s\n\n" +
+            "*Gravacao da Aula:* %s\n\n" +
+            "*Qualquer duvida, pode me chamar por aqui*\n" +
+            "*Site:* ctrlplay.com",
+            nomeTurma,
+            numAula,
+            dataAula,
+            nomeProfessor,
+            intro,
+            develop,
+            tarefaCasa,
+            gravacao);
+}
+    
+    
+    
+
     
     
 }

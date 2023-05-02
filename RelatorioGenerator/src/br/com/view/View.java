@@ -4,7 +4,17 @@
  */
 package br.com.view;
 
+import br.com.groupId.GroupId;
 import br.com.modelos.Relatorio;
+import java.io.IOException;
+import java.net.HttpRetryException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -13,6 +23,7 @@ import br.com.modelos.Relatorio;
 public class View extends javax.swing.JFrame {
     
     Relatorio relatorio = new Relatorio();
+    GroupId grupoId = new GroupId();
 
     /**
      * Creates new form View
@@ -42,7 +53,7 @@ public class View extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jTextFieldTurma = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextFieldDataAula = new javax.swing.JTextField();
+        jTextFieldNomeGrupo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaTarefaDeCasa = new javax.swing.JTextArea();
@@ -57,6 +68,9 @@ public class View extends javax.swing.JFrame {
         jTextAreaRelatorioFinal = new javax.swing.JTextArea();
         jLabel9 = new javax.swing.JLabel();
         jTextFieldGravacao = new javax.swing.JTextField();
+        jButtonWhatsapp = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jTextFieldDataAula1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,6 +140,17 @@ public class View extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Gravação");
 
+        jButtonWhatsapp.setText("ENVIAR WHATSAPP");
+        jButtonWhatsapp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonWhatsappActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("Segoe Print", 1, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("Nome Do Grupo :");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -133,43 +158,66 @@ public class View extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(136, 136, 136)
-                        .addComponent(jButtonGerarRelatorio))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane1)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addComponent(jLabel3)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jTextFieldProfessor, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addComponent(jLabel1)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jTextFieldTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabel9)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jTextFieldGravacao, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addComponent(jLabel4)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jTextFieldDataAula)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(jLabel5)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(jTextFieldNumAula, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addComponent(jLabel6)
-                                .addComponent(jLabel7)
-                                .addComponent(jLabel8)))))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane3)
+                                    .addComponent(jScrollPane2)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(jLabel7)
+                                                    .addGap(187, 187, 187))
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(jLabel10)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(jTextFieldNomeGrupo, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                                    .addGap(43, 43, 43)
+                                                    .addComponent(jLabel2)))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(62, 62, 62)
+                                                .addComponent(jButtonGerarRelatorio)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jButtonWhatsapp)))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(jScrollPane1))
+                                .addGap(22, 22, 22))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldProfessor, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel9)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldGravacao, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldDataAula1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel5)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldNumAula, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(152, 152, 152)
+                                .addComponent(jLabel8))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(155, 155, 155)
+                                .addComponent(jLabel6)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -193,10 +241,14 @@ public class View extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(jTextFieldDataAula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5)
-                            .addComponent(jTextFieldNumAula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jTextFieldNumAula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldDataAula1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(jTextFieldNomeGrupo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -208,8 +260,10 @@ public class View extends javax.swing.JFrame {
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonGerarRelatorio, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)))
+                        .addGap(29, 29, 29)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonWhatsapp, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                            .addComponent(jButtonGerarRelatorio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(18, 18, 18))
         );
 
@@ -230,7 +284,7 @@ public class View extends javax.swing.JFrame {
     private void jButtonGerarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerarRelatorioActionPerformed
         relatorio.setNomeProfessor(jTextFieldProfessor.getText());
         relatorio.setNomeTurma(jTextFieldTurma.getText());
-        relatorio.setDataAula(jTextFieldDataAula.getText());
+        relatorio.setDataAula(jTextFieldNomeGrupo.getText());
         relatorio.setNumAula(jTextFieldNumAula.getText());
         relatorio.setIntro(jTextAreaIntroducao.getText());
         relatorio.setDevelop(jTextAreaDesenvolvimento.getText());
@@ -239,6 +293,74 @@ public class View extends javax.swing.JFrame {
         
         jTextAreaRelatorioFinal.setText(relatorio.gerarRelatorio());
     }//GEN-LAST:event_jButtonGerarRelatorioActionPerformed
+
+    private void jButtonWhatsappActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonWhatsappActionPerformed
+        String nomeGrupo = jTextFieldNomeGrupo.getText();
+        String idGrupo;
+        String mensagemFinal = jTextAreaRelatorioFinal.getText();
+        
+        try {
+            
+            switch (nomeGrupo) {
+                case "CY3 Sexta 14h":
+                       idGrupo = grupoId.getCy3Sexta();
+                    break;
+                case "CT3 Quinta 14h":
+                    idGrupo = grupoId.getCt3Quinta14();
+                    break;
+                case "CT1 Quarta Hibrida":
+                    idGrupo = grupoId.getCt1QuaHib();
+                    break;
+                case "CT1 Quarta 14h":
+                    idGrupo = grupoId.getCt1Qua14();
+                    break;
+                case "CT2 Terca 16h":
+                    idGrupo = grupoId.getCt2Terca16();
+                    break;
+                case "CK1 Segunda 09h":
+                    idGrupo = grupoId.getCk1Seg09();
+                    break;
+                case "CY3 Online Segunda":
+                    idGrupo = grupoId.getCy3OnlineSeg();
+                    break;
+                case "CY2 Sabado 10h":
+                    idGrupo = grupoId.getCy2Sabado10();
+                    break;
+                case "CY2 Sabado Particular":
+                    idGrupo = grupoId.getCy2SabadoPart();
+                    break;
+                case "CT2 Sabado 08h":
+                    idGrupo = grupoId.getCt2Sabado08();
+                    break;
+                case "CK3 Sabado 14h" : 
+                    idGrupo = grupoId.getCk3Sabado14();
+                    break;
+                case "CT2 Sexta 09h":
+                    idGrupo = grupoId.getCt2Sexta09();
+                    break;
+                case "Teste":
+                    idGrupo = grupoId.getTeste();
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+            
+            String novaURL = URLEncoder.encode(relatorio.gerarRelatorio(),"UTF-8");
+                    
+            
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.ultramsg.com/instance45496/messages/chat?token=g19rmqyspp94pfwe&to="+idGrupo+"&body="+novaURL+"&priority=10"))
+                    .build();
+            HttpResponse<String> response = client
+                    .send(request, HttpResponse.BodyHandlers.ofString());
+                    System.out.println("deuBom");
+        } catch (IOException ex) {
+            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonWhatsappActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,7 +399,9 @@ public class View extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonGerarRelatorio;
+    private javax.swing.JButton jButtonWhatsapp;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -295,8 +419,9 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextAreaIntroducao;
     private javax.swing.JTextArea jTextAreaRelatorioFinal;
     private javax.swing.JTextArea jTextAreaTarefaDeCasa;
-    private javax.swing.JTextField jTextFieldDataAula;
+    private javax.swing.JTextField jTextFieldDataAula1;
     private javax.swing.JTextField jTextFieldGravacao;
+    private javax.swing.JTextField jTextFieldNomeGrupo;
     private javax.swing.JTextField jTextFieldNumAula;
     private javax.swing.JTextField jTextFieldProfessor;
     private javax.swing.JTextField jTextFieldTurma;
